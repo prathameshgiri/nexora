@@ -1,0 +1,17 @@
+import { Router } from "express";
+import multer from "multer";
+import path from "node:path";
+import crypto from "node:crypto";
+import { config } from "../config";
+import { authenticate } from "../middleware/auth";
+import { audit } from "../services/audit";
+import { insert, readDb, remove } from "../utils/json-db";
+import { fail, ok } from "../utils/api";
+import type { SalarySlip } from "../types";
+const router = Router(); router.use(authenticate);
+const storage = multer.diskStorage({ destination: (_req, _file, cb) => cb(null, path.join(config.uploadDir, "salary-slips")), filename: (_req, file, cb) => cb(null, `${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`) });
+const upload = multer({ storage, limits: { fileSize: config.uploadMaxBytes }, fileFilter: (_req, file, cb) => cb(null, ["application/pdf", "image/jpeg", "image/png"].includes(file.mimetype)) });
+router.get("/", async (req, res) => { const records = (await readDb<SalarySlip>("salary-slips")).filter(s => s.userId === req.auth!.user.id || req.auth!.permissions.includes("*")); return ok(res, records); });
+router.post("/", upload.single("file"), async (req, res) => { if (!req.file) return fail(res, "Upload a PDF, JPG, or PNG salary slip", 422); const records = await readDb<SalarySlip>("salary-slips"); if (records.some(s => s.userId === req.auth!.user.id && s.originalName === req.file!.originalname && s.salaryMonth === req.body.salaryMonth)) return fail(res, "Duplicate salary slip detected", 409); const slip = await insert<SalarySlip>("salary-slips", { userId: req.auth!.user.id, originalName: req.file.originalname, storedName: req.file.filename, mimeType: req.file.mimetype, size: req.file.size, salaryMonth: req.body.salaryMonth ?? new Date().toISOString().slice(0, 7), companyName: req.body.companyName ?? "", verified: false, createdAt: new Date().toISOString() }); await audit("salary-slip.upload", req.auth!.user.id, { slipId: slip.id }); return ok(res, slip, "Salary slip uploaded", 201); });
+router.delete("/:id", async (req, res) => { const records = await readDb<SalarySlip>("salary-slips"); const slip = records.find(s => s.id === req.params.id && (s.userId === req.auth!.user.id || req.auth!.permissions.includes("*"))); if (!slip) return fail(res, "Salary slip not found", 404); await remove("salary-slips", slip.id); await audit("salary-slip.delete", req.auth!.user.id, { slipId: slip.id }); return ok(res, null, "Salary slip deleted"); });
+export default router;

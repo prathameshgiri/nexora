@@ -1,0 +1,179 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap");
+
+@import "tailwindcss";
+
+/* Theme, content globs, and plugins are declared in tailwind.config.ts. */
+@config "../tailwind.config.ts";
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Manrope", sans-serif;
+  }
+
+  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code {
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
+@layer components {
+  .nav-item {
+    @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[12px] font-semibold text-[#7b918b] transition-colors hover:bg-[#f2f8f5] hover:text-[#286f5d];
+  }
+  .nav-item.active { @apply bg-[#eaf7f1] text-[#237b63]; }
+  .profile-menu { animation: menu-drop .2s ease-out both; transform-origin: top right; }
+  .profile-menu-item { @apply flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[11px] font-bold text-[#55766c] transition hover:bg-[#f3f9f6] hover:text-[#237b63]; }
+  .progress-fill { transform-origin: left; animation: bar-grow 1s cubic-bezier(.2,.8,.2,1) .3s both; }
+  .score-orb { @apply flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[10px] border-[#d5f0e3] text-2xl font-extrabold text-[#287d69]; background: radial-gradient(circle, #fff 54%, #edf9f3 55%); animation: gauge-pop .7s ease-out .35s both; }
+  @keyframes menu-drop { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .stat-card { @apply rounded-2xl border border-white/70 p-5 shadow-[0_5px_25px_rgba(32,85,68,0.035)]; }
+  .tone-green { background: linear-gradient(135deg, #e3f6ee, #f1faf6); }
+  .tone-blue { background: linear-gradient(135deg, #e6f2fb, #f5faff); }
+  .tone-peach { background: linear-gradient(135deg, #fff0e9, #fff8f4); }
+  .tone-lilac { background: linear-gradient(135deg, #f0edfb, #faf9ff); }
+  .transaction-icon { @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl; }
+  .transaction-icon.coral { @apply bg-[#fff0ec] text-[#e88b72]; }
+  .transaction-icon.mint { @apply bg-[#e6f7ef] text-[#35a27f]; }
+  .transaction-icon.lavender { @apply bg-[#f0edfa] text-[#8b78cb]; }
+  .transaction-icon.blue { @apply bg-[#e9f3fb] text-[#5d91ba]; }
+  .animate-rise { animation: rise-in .55s ease both; }
+  .stat-card:nth-child(2) { animation-delay: .07s; }
+  .stat-card:nth-child(3) { animation-delay: .14s; }
+  .stat-card:nth-child(4) { animation-delay: .21s; }
+  @keyframes rise-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .dashboard-content > div { animation: section-rise .65s ease both; }
+  .dashboard-content > div:nth-child(2) { animation-delay: .18s; }
+  .dashboard-content > div:nth-child(3) { animation-delay: .3s; }
+  .dashboard-content > div:nth-child(4) { animation-delay: .42s; }
+  .recharts-cartesian-grid { animation: chart-fade .8s ease both; }
+  .recharts-area-curve { stroke-dasharray: 900; stroke-dashoffset: 900; animation: chart-draw 1.8s cubic-bezier(.22,.75,.25,1) .35s forwards; }
+  .recharts-area-area { transform-origin: center bottom; animation: chart-fill 1.35s ease-out .4s both; }
+  .health-gauge .gauge-track { animation: gauge-pop .7s ease-out .55s both; transform-origin: center; }
+  .health-gauge .gauge-fill { stroke-dasharray: 600; animation: gauge-draw 1.5s cubic-bezier(.2,.8,.2,1) .65s both; transform-origin: center; }
+  .health-gauge p { animation: score-pop .6s ease-out 1.15s both; }
+  .stat-card .h-full { transform-origin: left; animation: bar-grow 1s cubic-bezier(.2,.8,.2,1) .45s both; }
+  .dashboard-content section .transaction-icon { animation: icon-pop .5s ease-out both; }
+  .dashboard-content section .transaction-icon:nth-child(2) { animation-delay: .12s; }
+  @keyframes section-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes chart-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes chart-draw { to { stroke-dashoffset: 0; } }
+  @keyframes chart-fill { from { opacity: 0; transform: scaleY(.35); } to { opacity: 1; transform: scaleY(1); } }
+  @keyframes gauge-pop { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: scale(1); } }
+  @keyframes gauge-draw { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes score-pop { from { opacity: 0; transform: translateY(8px) scale(.85); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes bar-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes icon-pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  }
+}

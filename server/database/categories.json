@@ -1,0 +1,47 @@
+[
+  {
+    "id": "category-1",
+    "name": "Rent",
+    "type": "expense"
+  },
+  {
+    "id": "category-2",
+    "name": "Food",
+    "type": "expense"
+  },
+  {
+    "id": "category-3",
+    "name": "Groceries",
+    "type": "expense"
+  },
+  {
+    "id": "category-4",
+    "name": "Electricity",
+    "type": "expense"
+  },
+  {
+    "id": "category-5",
+    "name": "Travel",
+    "type": "expense"
+  },
+  {
+    "id": "category-6",
+    "name": "Shopping",
+    "type": "expense"
+  },
+  {
+    "id": "category-7",
+    "name": "Medical",
+    "type": "expense"
+  },
+  {
+    "id": "category-8",
+    "name": "Investment",
+    "type": "expense"
+  },
+  {
+    "id": "category-9",
+    "name": "Other",
+    "type": "expense"
+  }
+]

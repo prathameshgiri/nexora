@@ -1,0 +1,42 @@
+[
+  {
+    "id": "super-admin",
+    "name": "Super Admin",
+    "permissions": [
+      "*"
+    ]
+  },
+  {
+    "id": "admin",
+    "name": "Admin",
+    "permissions": [
+      "users.read",
+      "reports.read",
+      "categories.manage"
+    ]
+  },
+  {
+    "id": "finance-advisor",
+    "name": "Finance Advisor",
+    "permissions": [
+      "financial.read",
+      "recommendations.manage"
+    ]
+  },
+  {
+    "id": "auditor",
+    "name": "Auditor",
+    "permissions": [
+      "audit.read",
+      "reports.read"
+    ]
+  },
+  {
+    "id": "user",
+    "name": "Normal User",
+    "permissions": [
+      "financial.manage",
+      "reports.read"
+    ]
+  }
+]

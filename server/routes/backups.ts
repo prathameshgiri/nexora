@@ -1,0 +1,10 @@
+import { Router } from "express";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { authenticate, requirePermission } from "../middleware/auth";
+import { config } from "../config";
+import { ensureDatabase } from "../utils/json-db";
+import { ok } from "../utils/api";
+const router = Router(); router.use(authenticate, requirePermission("*"));
+router.post("/", async (_req, res) => { await ensureDatabase(); const files = await fs.readdir(config.databaseDir); const backup: Record<string, unknown> = {}; for (const file of files.filter(f => f.endsWith(".json"))) backup[file] = JSON.parse(await fs.readFile(path.join(config.databaseDir, file), "utf8")); return ok(res, { createdAt: new Date().toISOString(), files: backup }, "Backup created"); });
+export default router;
