@@ -63,5 +63,54 @@
     "createdAt": "2026-08-06T12:41:54.425Z",
     "updatedAt": "2026-08-06T12:41:54.425Z",
     "id": "ca170edc-c0ce-4a0e-b660-28f30a988146"
+  },
+  {
+    "email": "prathameshgiri8600@gmail.com",
+    "password": "Pass@123",
+    "fullName": "Prathamesh Giri",
+    "mobile": "8010901226",
+    "passwordHash": "$2b$12$DUDXCCIuycs9lVaTe1FZ6O5UiAB5TiGoXGdHnUNXEFTYxY6BJVANK",
+    "role": "Normal User",
+    "status": "active",
+    "failedLoginAttempts": 0,
+    "loginHistory": [
+      "2026-08-06T14:30:56.987Z",
+      "2026-08-06T14:31:45.839Z"
+    ],
+    "createdAt": "2026-08-06T14:30:33.832Z",
+    "updatedAt": "2026-08-06T14:30:33.832Z",
+    "id": "d6f3bf17-625e-4dec-85d7-a77f13a66c76"
+  },
+  {
+    "email": "prathameshgiri8607@gmail.com",
+    "password": "Pass@123",
+    "fullName": "Prathamesh Giri",
+    "mobile": "80445596596",
+    "passwordHash": "$2b$12$FSHpnXVbFwReqEH9et8vHutItOHgUo/IO4UnEIEQpIpzhAeOB7XpC",
+    "role": "Normal User",
+    "status": "active",
+    "failedLoginAttempts": 0,
+    "loginHistory": [
+      "2026-08-06T14:36:50.753Z",
+      "2026-08-06T14:37:49.719Z",
+      "2026-08-06T14:38:03.544Z"
+    ],
+    "createdAt": "2026-08-06T14:36:41.751Z",
+    "updatedAt": "2026-08-06T14:36:41.751Z",
+    "id": "75449ab1-1cdd-4485-a99c-8deba2002e8d"
+  },
+  {
+    "email": "test2@example.com",
+    "password": "password123",
+    "fullName": "Test User",
+    "mobile": "9999999999",
+    "passwordHash": "$2b$12$Frlz7XOL4UR5YAvqdiD1DOVLyIjzlmol8Odmerhncy6rW1UpS3caa",
+    "role": "Normal User",
+    "status": "active",
+    "failedLoginAttempts": 0,
+    "loginHistory": [],
+    "createdAt": "2026-08-06T14:37:23.847Z",
+    "updatedAt": "2026-08-06T14:37:23.847Z",
+    "id": "518edd53-f150-4663-8f38-35a098037f60"
   }
 ]

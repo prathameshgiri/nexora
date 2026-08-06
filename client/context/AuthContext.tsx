@@ -12,7 +12,7 @@ type User = {
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  login: (token: string, refreshToken?: string) => void;
+  login: (token: string, refreshToken?: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -55,10 +55,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = (token: string, refreshToken?: string) => {
+  const login = async (token: string, refreshToken?: string) => {
     localStorage.setItem("accessToken", token);
     if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
-    checkAuth();
+    await checkAuth();
   };
 
   const logout = () => {

@@ -48,7 +48,7 @@ export default function Login() {
         throw new Error(data.error?.message || data.message || "Authentication failed");
       }
 
-      login(data.data.accessToken, data.data.refreshToken);
+      await login(data.data.accessToken, data.data.refreshToken);
       navigate("/dashboard");
     } catch (err: any) {
       setError(err.message || "Something went wrong");
@@ -65,14 +65,14 @@ export default function Login() {
         
         <Link to="/" className="relative flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#51b994]">
-            <CircleDollarSign size={21} />
+            <CircleDollarSign size={21} strokeWidth={2.5} />
           </div>
           <span className="text-[15px] font-extrabold">Nexora<span className="text-[#6bd2aa]">.</span></span>
         </Link>
         
         <div className="relative max-w-lg">
           <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2d6655]">
-            <Sparkles size={21} className="text-[#72d1ae]" />
+            <Sparkles size={21} strokeWidth={2.5} className="text-[#72d1ae]" />
           </div>
           <h1 className="text-[46px] font-extrabold leading-[1.07] tracking-[-0.06em]">
             Make every rupee<br /><span className="text-[#6fd2ae]">count for more.</span>
@@ -83,7 +83,7 @@ export default function Login() {
           <div className="mt-8 flex flex-wrap gap-3">
             {["Smart insights", "Private by design", "Built for clarity"].map(t => (
               <span key={t} className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-semibold text-[#c3ded4]">
-                <Check size={13} className="text-[#67cfa8]" />{t}
+                <Check size={13} strokeWidth={2.5} className="text-[#67cfa8]" />{t}
               </span>
             ))}
           </div>
@@ -95,7 +95,7 @@ export default function Login() {
         <div className="w-full max-w-[390px]">
           <Link to="/" className="mb-12 flex items-center gap-3 lg:hidden">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1f7a63] text-white">
-              <CircleDollarSign size={20} />
+              <CircleDollarSign size={20} strokeWidth={2.5} />
             </div>
             <span className="text-[15px] font-extrabold tracking-tight text-[#18352f]">Nexora<span className="text-[#1f9b78]">.</span></span>
           </Link>
@@ -114,7 +114,7 @@ export default function Login() {
 
           {error && (
             <div className="mb-6 flex items-center gap-3 rounded-xl bg-[#fff0ed] p-4 text-sm font-semibold text-[#c84831]">
-              <AlertCircle size={18} />
+              <AlertCircle size={18} strokeWidth={2.5} />
               {error}
             </div>
           )}
@@ -146,7 +146,7 @@ export default function Login() {
               <div className="relative">
                 <input required type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 pr-11 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 text-[#91aaa1]">
-                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                  {showPassword ? <EyeOff size={17} strokeWidth={2.5} /> : <Eye size={17} strokeWidth={2.5} />}
                 </button>
               </div>
             </label>
@@ -159,7 +159,7 @@ export default function Login() {
             )}
 
             <button disabled={loading} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1f7a63] text-sm font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:-translate-y-0.5 hover:bg-[#196b56] disabled:opacity-70 disabled:hover:translate-y-0">
-              {loading ? "Please wait..." : isSignup ? "Create account" : "Continue to Nexora"} <ArrowRight size={16} />
+              {loading ? "Please wait..." : isSignup ? "Create account" : "Continue to Nexora"} <ArrowRight size={16} strokeWidth={2.5} />
             </button>
           </form>
           
@@ -168,7 +168,7 @@ export default function Login() {
           </div>
           
           <div className="flex items-center gap-2 rounded-xl bg-[#f0f8f4] p-3 text-[11px] text-[#6c8c81]">
-            <ShieldCheck size={17} className="text-[#35a27f]" />
+            <ShieldCheck size={17} strokeWidth={2.5} className="text-[#35a27f]" />
             Your data is encrypted and never shared with third parties.
           </div>
           
