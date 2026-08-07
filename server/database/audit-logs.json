@@ -194,5 +194,12 @@
     "metadata": {},
     "createdAt": "2026-08-07T14:16:20.983Z",
     "id": "8181228b-592d-42f1-9650-297dfd43cacf"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-07T15:19:46.781Z",
+    "id": "eb8e0557-23f8-4bc3-be29-15c7c7588e3d"
   }
 ]
