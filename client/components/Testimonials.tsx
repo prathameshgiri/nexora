@@ -8,9 +8,9 @@ const fadeUp: Variants = {
 
 export function Testimonials() {
   const reviews = [
-    { name: "Sarah Jenkins", role: "Freelance Designer", text: "Nexora completely changed how I manage my unpredictable income. The AI tracking is flawless." },
-    { name: "Michael Chen", role: "Software Engineer", text: "The cleanest UI of any finance app I've used. Finally, something that feels premium and actually works." },
-    { name: "Emily Rodriguez", role: "Small Business Owner", text: "I can finally see all my accounts in one place without the clutter. Worth every penny." }
+    { name: "Neha Sharma", role: "Freelance Designer", text: "Nexora completely changed how I manage my unpredictable income. The AI tracking is flawless." },
+    { name: "Prathamesh Giri", role: "Software Engineer", text: "The cleanest UI of any finance app I've used. Finally, something that feels premium and actually works." },
+    { name: "Rahul Verma", role: "Small Business Owner", text: "I can finally see all my accounts in one place without the clutter. Worth every penny." }
   ];
 
   return (

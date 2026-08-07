@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BarChart3, CheckCircle2, ChevronRight, CircleDollarSign, LayoutDashboard, Lock, PieChart, ShieldCheck, Sparkles, Star, Target, Zap, XCircle, Fingerprint, ChevronDown, Smartphone, Apple, Bot, Menu, X, Wallet, FileText } from "lucide-react";
+import { ArrowRight, BarChart3, CheckCircle2, ChevronRight, CircleDollarSign, LayoutDashboard, Lock, PieChart, ShieldCheck, Sparkles, Star, Target, Zap, XCircle, Fingerprint, ChevronDown, Smartphone, Apple, Bot, Menu, X, Wallet, FileText, MessageCircle, Globe, Mail, Phone } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
@@ -382,13 +382,61 @@ export default function Landing() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-black/40 py-12 relative z-10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 sm:px-6 lg:flex-row lg:px-8">
-          <Logo />
-          <p className="text-sm font-semibold text-[#5c7a70] text-center">© {new Date().getFullYear()} Nexora Technologies. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link to="#" className="text-sm font-bold text-[#8ba89f] hover:text-white transition">Privacy Policy</Link>
-            <Link to="#" className="text-sm font-bold text-[#8ba89f] hover:text-white transition">Terms of Service</Link>
+      <footer className="relative z-10 border-t border-white/10 bg-[#020604] pt-24 pb-12 overflow-hidden">
+        {/* Glow effect for footer */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-[#10b981]/50 to-transparent"></div>
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#10b981]/5 blur-[120px] rounded-full pointer-events-none transform-gpu"></div>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+            <div className="col-span-2 lg:col-span-2">
+              <Logo />
+              <p className="mt-6 text-[#8ba89f] text-sm leading-relaxed max-w-xs">
+                Nexora is the intelligent financial ecosystem that helps you track, manage, and grow your wealth with bank-grade security and AI-driven insights.
+              </p>
+              <div className="mt-8 flex items-center gap-4">
+                {[MessageCircle, Globe, Mail, Phone].map((Icon, idx) => (
+                  <a key={idx} href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#8ba89f] hover:text-[#10b981] hover:bg-[#10b981]/10 hover:border-[#10b981]/30 transition-all duration-300">
+                    <Icon size={18} strokeWidth={2} />
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-white font-extrabold mb-6 tracking-wide">Product</h3>
+              <ul className="space-y-4">
+                {["Features", "Integrations", "Pricing", "Changelog", "Docs"].map(link => (
+                  <li key={link}><Link to="#" className="text-[#8ba89f] hover:text-[#10b981] text-sm font-medium transition-colors">{link}</Link></li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-white font-extrabold mb-6 tracking-wide">Company</h3>
+              <ul className="space-y-4">
+                {["About Us", "Careers", "Blog", "Contact", "Partners"].map(link => (
+                  <li key={link}><Link to="#" className="text-[#8ba89f] hover:text-[#10b981] text-sm font-medium transition-colors">{link}</Link></li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-white font-extrabold mb-6 tracking-wide">Legal</h3>
+              <ul className="space-y-4">
+                {["Privacy Policy", "Terms of Service", "Cookie Policy", "Security", "Compliance"].map(link => (
+                  <li key={link}><Link to="#" className="text-[#8ba89f] hover:text-[#10b981] text-sm font-medium transition-colors">{link}</Link></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs font-semibold text-[#5c7a70]">© {new Date().getFullYear()} Nexora Technologies. All rights reserved.</p>
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse"></span>
+              <span className="text-xs font-bold text-[#8ba89f]">All systems operational</span>
+            </div>
           </div>
         </div>
       </footer>
