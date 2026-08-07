@@ -14,6 +14,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [salaryAmount, setSalaryAmount] = useState("");
+  const [salaryDate, setSalaryDate] = useState("1");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +35,7 @@ export default function Login() {
     try {
       const endpoint = isSignup ? "/api/auth/register" : "/api/auth/login";
       const body = isSignup 
-        ? { email, password, fullName, mobile }
+        ? { email, password, fullName, mobile, salaryAmount: Number(salaryAmount), salaryDate: Number(salaryDate) }
         : { email, password };
 
       const res = await fetch(endpoint, {
@@ -130,6 +132,16 @@ export default function Login() {
                   <span className="mb-2 block text-[11px] font-bold text-[#54746a]">Mobile Number</span>
                   <input required type="tel" value={mobile} onChange={e => setMobile(e.target.value)} placeholder="9876543210" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
                 </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="block">
+                    <span className="mb-2 block text-[11px] font-bold text-[#54746a]">Monthly Salary (₹)</span>
+                    <input required type="number" min="0" value={salaryAmount} onChange={e => setSalaryAmount(e.target.value)} placeholder="50000" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-[11px] font-bold text-[#54746a]">Salary Date (1-31)</span>
+                    <input required type="number" min="1" max="31" value={salaryDate} onChange={e => setSalaryDate(e.target.value)} placeholder="1" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
+                  </label>
+                </div>
               </>
             )}
 

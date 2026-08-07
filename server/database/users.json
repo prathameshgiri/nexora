@@ -93,7 +93,16 @@
     "loginHistory": [
       "2026-08-06T14:36:50.753Z",
       "2026-08-06T14:37:49.719Z",
-      "2026-08-06T14:38:03.544Z"
+      "2026-08-06T14:38:03.544Z",
+      "2026-08-06T16:59:43.540Z",
+      "2026-08-06T18:16:27.344Z",
+      "2026-08-06T18:20:41.508Z",
+      "2026-08-06T18:36:36.074Z",
+      "2026-08-07T11:51:31.896Z",
+      "2026-08-07T12:22:06.680Z",
+      "2026-08-07T12:28:27.703Z",
+      "2026-08-07T13:08:44.617Z",
+      "2026-08-07T13:11:34.518Z"
     ],
     "createdAt": "2026-08-06T14:36:41.751Z",
     "updatedAt": "2026-08-06T14:36:41.751Z",
@@ -112,5 +121,37 @@
     "createdAt": "2026-08-06T14:37:23.847Z",
     "updatedAt": "2026-08-06T14:37:23.847Z",
     "id": "518edd53-f150-4663-8f38-35a098037f60"
+  },
+  {
+    "email": "test@test.com",
+    "password": "password",
+    "fullName": "Test User",
+    "mobile": "9876543210",
+    "salaryAmount": 50000,
+    "salaryDate": 1,
+    "passwordHash": "$2b$12$3n9cDnsbdWyHKNNL62DWK.fG07CP4CjwEnD82tpD7P3oTs9xCZdgO",
+    "role": "Normal User",
+    "status": "active",
+    "failedLoginAttempts": 0,
+    "loginHistory": [],
+    "createdAt": "2026-08-07T12:20:04.192Z",
+    "updatedAt": "2026-08-07T12:20:04.192Z",
+    "id": "2683ca08-9bc2-4b8a-8c60-cde975e25ffd"
+  },
+  {
+    "email": "testuser1@example.com",
+    "password": "password123",
+    "fullName": "John Doe",
+    "mobile": "9876543210",
+    "salaryAmount": 50000,
+    "salaryDate": 11,
+    "passwordHash": "$2b$12$ujBz9pF8unfRFj1/aU7ReuNV1mSs3xyDwEeD0VMChJa8E5KKQR/fq",
+    "role": "Normal User",
+    "status": "active",
+    "failedLoginAttempts": 0,
+    "loginHistory": [],
+    "createdAt": "2026-08-07T12:40:36.761Z",
+    "updatedAt": "2026-08-07T12:40:36.762Z",
+    "id": "9d9d5166-1348-4cbb-ba4a-bb78e6dfc233"
   }
 ]

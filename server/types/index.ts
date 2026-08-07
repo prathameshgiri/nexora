@@ -1,3 +1,3 @@
-export interface User { id: string; email: string; fullName: string; mobile: string; passwordHash: string; role: string; status: "active" | "suspended"; failedLoginAttempts: number; lockUntil?: string; loginHistory: string[]; createdAt: string; updatedAt: string; }
+export interface User { id: string; email: string; fullName: string; mobile: string; salaryAmount: number; salaryDate: number; passwordHash: string; role: string; status: "active" | "suspended"; failedLoginAttempts: number; lockUntil?: string; loginHistory: string[]; createdAt: string; updatedAt: string; }
 export interface SalarySlip { id: string; userId: string; originalName: string; storedName: string; mimeType: string; size: number; salaryMonth: string; companyName: string; verified: boolean; createdAt: string; }
 export interface FinancialRecord { id: string; userId: string; title: string; amount: number; category?: string; date: string; description?: string; createdAt: string; updatedAt: string; }

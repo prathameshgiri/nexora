@@ -7,6 +7,8 @@ type User = {
   mobile: string;
   role: string;
   status: string;
+  salaryAmount: number;
+  salaryDate: number;
 };
 
 type AuthContextType = {

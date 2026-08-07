@@ -12,6 +12,9 @@ import Login from "./pages/Login";
 import Workspace from "./pages/Workspace";
 import NotFound from "./pages/NotFound";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AppDataProvider } from "./context/AppDataContext";
+import { ThemeProvider } from "next-themes";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -31,30 +34,37 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
+    <ThemeProvider defaultTheme="system" attribute="class">
+      <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/transactions" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/budget-planner" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/goals" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/salary-slips" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/investments" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/financial-health" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/profile-settings" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            <Route path="/privacy-security" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <AppDataProvider>
+          <BrowserRouter>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/transactions" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/budget-planner" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/goals" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/salary-slips" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/investments" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/financial-health" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/profile-settings" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/privacy-security" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                <Route path="/ai-coach" element={<ProtectedRoute><Workspace /></ProtectedRoute>} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </ErrorBoundary>
+          </BrowserRouter>
+        </AppDataProvider>
       </TooltipProvider>
     </AuthProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

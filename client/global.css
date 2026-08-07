@@ -107,9 +107,12 @@
   html, body {
     @apply bg-background text-foreground;
     font-family: "DM Sans", sans-serif;
-    overflow-x: hidden;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  #root {
+    overflow-x: hidden;
   }
 
   ::-webkit-scrollbar {
@@ -142,11 +145,15 @@
   .progress-fill { transform-origin: left; animation: bar-grow 1s cubic-bezier(.2,.8,.2,1) .3s both; }
   .score-orb { @apply flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-[10px] border-[#d5f0e3] text-2xl font-extrabold text-[#287d69]; background: radial-gradient(circle, #fff 54%, #edf9f3 55%); animation: gauge-pop .7s ease-out .35s both; }
   @keyframes menu-drop { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .stat-card { @apply rounded-2xl border border-white/70 p-5 shadow-[0_5px_25px_rgba(32,85,68,0.035)]; }
+  .stat-card { @apply rounded-2xl border border-white/70 dark:border-white/5 p-5 shadow-[0_5px_25px_rgba(32,85,68,0.035)] dark:shadow-none; }
   .tone-green { background: linear-gradient(135deg, #e3f6ee, #f1faf6); }
   .tone-blue { background: linear-gradient(135deg, #e6f2fb, #f5faff); }
   .tone-peach { background: linear-gradient(135deg, #fff0e9, #fff8f4); }
   .tone-lilac { background: linear-gradient(135deg, #f0edfb, #faf9ff); }
+  .dark .tone-green { background: linear-gradient(135deg, #14352b, #0d271f); }
+  .dark .tone-blue { background: linear-gradient(135deg, #142f42, #0d1e2b); }
+  .dark .tone-peach { background: linear-gradient(135deg, #45281e, #2e1a13); }
+  .dark .tone-lilac { background: linear-gradient(135deg, #2b2640, #1b172b); }
   .transaction-icon { @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl; }
   .transaction-icon.coral { @apply bg-[#fff0ec] text-[#e88b72]; }
   .transaction-icon.mint { @apply bg-[#e6f7ef] text-[#35a27f]; }
