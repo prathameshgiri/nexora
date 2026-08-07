@@ -26,7 +26,7 @@ export function AddTransactionModal({ isOpen, onClose }: { isOpen: boolean; onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#15352e]/30 p-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#15352e]/30 p-4 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-2xl bg-white dark:bg-card p-6 shadow-2xl">
         <div className="flex items-center justify-between">
           <div>
