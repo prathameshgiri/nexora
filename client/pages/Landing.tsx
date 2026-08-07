@@ -3,8 +3,6 @@ import { ArrowRight, BarChart3, CheckCircle2, ChevronRight, CircleDollarSign, La
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
-import { Hero3DScene } from "../components/Hero3DScene";
-import Tilt from "react-parallax-tilt";
 import { SocialProof } from "../components/SocialProof";
 import { HowItWorks } from "../components/HowItWorks";
 import { Testimonials } from "../components/Testimonials";
@@ -107,7 +105,8 @@ export default function Landing() {
       <main>
         {/* 2. Hero Section with 3D Scene */}
         <section className="relative overflow-hidden pt-36 pb-20 lg:pt-48 lg:pb-32 min-h-[90vh] flex items-center justify-center">
-          <Hero3DScene />
+          {/* Removed Hero3DScene for performance */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#10b981]/20 via-[#020604] to-[#020604] opacity-50"></div>
 
           <motion.div
             initial="hidden"
@@ -171,7 +170,7 @@ export default function Landing() {
 
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Feature 1 - Wide card */}
-              <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} transitionSpeed={1500} scale={1.02} className="md:col-span-2 relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-gradient-to-br from-[#0a110e] to-[#040907] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
+              <div className="md:col-span-2 relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-gradient-to-br from-[#0a110e] to-[#040907] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#10b981]/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></div>
                 <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#10b981]/20 blur-[80px] rounded-full pointer-events-none"></div>
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#10b981]/20 text-[#10b981] mb-6 relative z-10 border border-[#10b981]/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
@@ -181,10 +180,10 @@ export default function Landing() {
                 <p className="text-[#94b3a8] text-lg leading-relaxed relative z-10 max-w-lg">
                   Our advanced AI engine automatically categorizes every transaction in real-time, learning from your habits to provide unparalleled accuracy.
                 </p>
-              </Tilt>
+              </div>
 
               {/* Feature 2 - Tall card */}
-              <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} transitionSpeed={1500} scale={1.02} className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
+              <div className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
                 <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#3b82f6]/10 blur-[80px] rounded-full pointer-events-none"></div>
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1e293b] text-[#60a5fa] mb-6 border border-[#3b82f6]/20 relative z-10">
                   <FileText size={28} strokeWidth={2.5} />
@@ -193,10 +192,10 @@ export default function Landing() {
                 <p className="text-[#94b3a8] text-lg leading-relaxed relative z-10">
                   Upload and verify salary slips, keeping all records permanently archived and easily searchable.
                 </p>
-              </Tilt>
+              </div>
 
               {/* Feature 3 - Square card */}
-              <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} transitionSpeed={1500} scale={1.02} className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
+              <div className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#f59e0b]/5 to-transparent pointer-events-none"></div>
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#452003] text-[#fbbf24] mb-6 border border-[#f59e0b]/20 relative z-10">
                   <Target size={28} strokeWidth={2.5} />
@@ -205,10 +204,10 @@ export default function Landing() {
                 <p className="text-[#94b3a8] text-lg leading-relaxed relative z-10">
                   Set ambitious financial goals and let Nexora help you achieve them with milestone tracking.
                 </p>
-              </Tilt>
+              </div>
 
               {/* Feature 4 - Square card */}
-              <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5} perspective={1000} transitionSpeed={1500} scale={1.02} className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
+              <div className="relative group rounded-[2rem] border-2 border-[#10b981]/20 hover:border-[#10b981]/50 bg-[#0a110e] p-8 sm:p-10 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300 overflow-hidden">
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2e1065] text-[#a78bfa] mb-6 border border-[#8b5cf6]/20 relative z-10">
                   <BarChart3 size={28} strokeWidth={2.5} />
                 </div>
@@ -216,7 +215,7 @@ export default function Landing() {
                 <p className="text-[#94b3a8] text-lg leading-relaxed relative z-10">
                   Understand your spending patterns with beautiful, intuitive charts and weekly insights.
                 </p>
-              </Tilt>
+              </div>
             </motion.div>
           </div>
         </section>
