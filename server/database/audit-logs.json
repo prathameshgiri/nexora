@@ -166,5 +166,33 @@
     "metadata": {},
     "createdAt": "2026-08-07T13:49:04.001Z",
     "id": "88ffe462-885b-4408-bb44-3756daddc2bf"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-07T14:11:30.213Z",
+    "id": "e587cb0a-fb54-4c54-98b2-c70042a0986d"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-07T14:12:02.736Z",
+    "id": "97293522-7e57-4658-bab7-fe922318223f"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-07T14:12:36.650Z",
+    "id": "8baabc7c-d57b-4f3e-bf3f-8664d983be23"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-07T14:16:20.983Z",
+    "id": "8181228b-592d-42f1-9650-297dfd43cacf"
   }
 ]
