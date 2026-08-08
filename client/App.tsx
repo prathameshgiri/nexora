@@ -13,6 +13,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Workspace from "./pages/Workspace";
 import NotFound from "./pages/NotFound";
+import Admin from "./pages/Admin";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { AppDataProvider } from "./context/AppDataContext";
 import { ThemeProvider } from "next-themes";
@@ -42,6 +43,11 @@ function SmoothScroll({ children }: { children: React.ReactNode }) {
   }, []);
 
   return <>{children}</>;
+}
+
+function AppDataWrapper({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  return <AppDataProvider key={user?.id || 'guest'}>{children}</AppDataProvider>;
 }
 
 const queryClient = new QueryClient();
@@ -101,6 +107,7 @@ function AnimatedRoutes() {
         <Route path="/profile-settings" element={<ProtectedRoute><PageWrapper><Workspace /></PageWrapper></ProtectedRoute>} />
         <Route path="/privacy-security" element={<ProtectedRoute><PageWrapper><Workspace /></PageWrapper></ProtectedRoute>} />
         <Route path="/ai-coach" element={<ProtectedRoute><PageWrapper><Workspace /></PageWrapper></ProtectedRoute>} />
+        <Route path="/admin/bwpg" element={<PageWrapper><Admin /></PageWrapper>} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
       </Routes>
@@ -116,14 +123,14 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <AppDataProvider>
+        <AppDataWrapper>
           <BrowserRouter>
             <ScrollToTop />
             <ErrorBoundary>
               <AnimatedRoutes />
             </ErrorBoundary>
           </BrowserRouter>
-        </AppDataProvider>
+        </AppDataWrapper>
       </TooltipProvider>
       </AuthProvider>
       </SmoothScroll>

@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Home, Wallet, CreditCard, Zap, TrendingUp, UserRound, ShieldCheck, PieChart, Target, FileText } from 'lucide-react';
+import { useAuth } from './AuthContext';
 
 export type Transaction = {
   id: string;
   name: string;
   type: string;
   date: string;
+  timestamp?: number;
   amount: number;
   category: string;
   iconName: string;
@@ -42,6 +44,14 @@ export type SalarySlip = {
   verified: boolean;
 };
 
+export type BudgetUsage = {
+  name: string;
+  planned: number;
+  used: number;
+  remaining: number;
+  color: string;
+};
+
 type AppDataContextType = {
   transactions: Transaction[];
   addTransaction: (t: Omit<Transaction, 'id' | 'date'>) => void;
@@ -52,6 +62,7 @@ type AppDataContextType = {
   budgets: Category[];
   addBudget: (b: Category) => void;
   removeBudget: (name: string) => void;
+  budgetUsages: BudgetUsage[];
   
   goals: Goal[];
   addGoal: (g: Omit<Goal, 'id' | 'value'>) => void;
@@ -65,71 +76,70 @@ type AppDataContextType = {
   addSalarySlip: (s: Omit<SalarySlip, 'id' | 'date' | 'verified'>) => void;
   
   cashFlow: { m: string; income: number; expense: number }[];
+  financialHealthScore: number;
+  
+  expectedSalary: number;
+  setExpectedSalary: (val: number) => void;
 };
 
-const defaultCashFlow = [
-  { m: "Jan", income: 72000, expense: 45000 },
-  { m: "Feb", income: 78000, expense: 50000 },
-  { m: "Mar", income: 74000, expense: 44000 },
-  { m: "Apr", income: 83000, expense: 55000 },
-  { m: "May", income: 88000, expense: 48000 },
-  { m: "Jun", income: 91000, expense: 52000 },
-  { m: "Jul", income: 104500, expense: 57840 }
-];
+const getMonthsAgoTimestamp = (monthsAgo: number) => {
+  const d = new Date();
+  d.setMonth(d.getMonth() - monthsAgo);
+  return d.getTime();
+};
 
-const defaultTransactions: Transaction[] = [
-  { id: "1", name: "Apartment rent", type: "Housing", date: "Today, 9:42 AM", amount: -18500, category: "Housing", iconName: "Home" },
-  { id: "2", name: "Salary credited", type: "Income", date: "Jul 01, 2024", amount: 92000, category: "Income", iconName: "Wallet" },
-  { id: "3", name: "Netflix subscription", type: "Entertainment", date: "Jun 30, 2024", amount: -649, category: "Entertainment", iconName: "CreditCard" },
-  { id: "4", name: "Freelance project", type: "Additional income", date: "Jun 28, 2024", amount: 12500, category: "Income", iconName: "Zap" }
-];
+const defaultTransactions: Transaction[] = [];
 
-const defaultGoals: Goal[] = [
-  { id: "1", label: "Emergency fund", value: 68, currentAmount: 204000, targetAmount: 300000, color: "#4eb894" },
-  { id: "2", label: "MacBook Pro", value: 42, currentAmount: 67200, targetAmount: 160000, color: "#9a88da" },
-  { id: "3", label: "Goa trip", value: 26, currentAmount: 13000, targetAmount: 50000, color: "#f2a083" }
-];
+const defaultGoals: Goal[] = [];
 
-const defaultInvestments: Investment[] = [
-  { id: "1", name: "SBI Bluechip Fund", value: 182000, type: "Mutual funds", returnRate: 18.2 },
-  { id: "2", name: "HDFC Fixed Deposit", value: 135000, type: "Fixed deposits", returnRate: 7.1 },
-  { id: "3", name: "Nifty 50 ETF", value: 86500, type: "Stocks", returnRate: 12.6 },
-  { id: "4", name: "Digital Gold", value: 79150, type: "Gold & others", returnRate: 9.4 }
-];
+const defaultInvestments: Investment[] = [];
 
-const defaultSalarySlips: SalarySlip[] = [
-  { id: "1", name: "Salary slip · July 2024", date: "2 days ago", size: "1.2 MB", verified: true },
-  { id: "2", name: "Salary slip · June 2024", date: "32 days ago", size: "1.1 MB", verified: true },
-  { id: "3", name: "Salary slip · May 2024", date: "63 days ago", size: "1.3 MB", verified: true }
-];
+const defaultSalarySlips: SalarySlip[] = [];
 
 export const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
 
 export function AppDataProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const userId = user?.id || 'guest';
+  const prefix = `nexora_data_${userId}_`;
+
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    const saved = localStorage.getItem('nexora_transactions');
+    const saved = localStorage.getItem(`${prefix}transactions`);
     return saved ? JSON.parse(saved) : defaultTransactions;
   });
 
   const [goals, setGoals] = useState<Goal[]>(() => {
-    const saved = localStorage.getItem('nexora_goals');
+    const saved = localStorage.getItem(`${prefix}goals`);
     return saved ? JSON.parse(saved) : defaultGoals;
   });
 
   const [investments, setInvestments] = useState<Investment[]>(() => {
-    const saved = localStorage.getItem('nexora_investments');
+    const saved = localStorage.getItem(`${prefix}investments`);
     return saved ? JSON.parse(saved) : defaultInvestments;
   });
 
   const [salarySlips, setSalarySlips] = useState<SalarySlip[]>(() => {
-    const saved = localStorage.getItem('nexora_salary_slips');
+    const saved = localStorage.getItem(`${prefix}salary_slips`);
     return saved ? JSON.parse(saved) : defaultSalarySlips;
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
+  const [budgets, setBudgets] = useState<Category[]>(() => {
+    const saved = localStorage.getItem(`${prefix}budgets`);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [expectedSalary, setExpectedSalary] = useState<number>(() => {
+    const saved = localStorage.getItem(`${prefix}expected_salary`);
+    return saved ? Number(saved) : 120000;
+  });
 
   useEffect(() => {
-    localStorage.setItem('nexora_transactions', JSON.stringify(transactions));
+    localStorage.setItem(`${prefix}expected_salary`, expectedSalary.toString());
+  }, [expectedSalary, prefix]);
+
+  useEffect(() => {
+    localStorage.setItem(`${prefix}transactions`, JSON.stringify(transactions));
     
     const expenseTxs = transactions.filter(t => t.amount < 0);
     const catMap: Record<string, number> = {};
@@ -146,43 +156,90 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
       }))
       .sort((a, b) => b.value - a.value);
 
-    setCategories(newCategories.length > 0 ? newCategories : [
-      { name: "Housing", value: 18500, color: "#4eb894" },
-      { name: "Food & dining", value: 8500, color: "#f2a083" }
-    ]);
+    setCategories(newCategories);
+  }, [transactions, prefix]);
 
+  useEffect(() => {
+    localStorage.setItem(`${prefix}goals`, JSON.stringify(goals));
+  }, [goals, prefix]);
+
+  useEffect(() => {
+    localStorage.setItem(`${prefix}investments`, JSON.stringify(investments));
+  }, [investments, prefix]);
+
+  useEffect(() => {
+    localStorage.setItem(`${prefix}salary_slips`, JSON.stringify(salarySlips));
+  }, [salarySlips, prefix]);
+
+  useEffect(() => {
+    localStorage.setItem(`${prefix}budgets`, JSON.stringify(budgets));
+  }, [budgets, prefix]);
+
+  // Derived Dynamic Data
+  const cashFlow = useMemo(() => {
+    const flow = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+       flow.push({ m: d.toLocaleString('default', { month: 'short' }), income: 0, expense: 0, year: d.getFullYear(), month: d.getMonth() });
+    }
+    
+    transactions.forEach(t => {
+       const tDate = t.timestamp ? new Date(t.timestamp) : new Date();
+       const monthFlow = flow.find(f => f.month === tDate.getMonth() && f.year === tDate.getFullYear());
+       if (monthFlow) {
+           if (t.amount > 0) monthFlow.income += t.amount;
+           else monthFlow.expense += Math.abs(t.amount);
+       }
+    });
+    return flow;
   }, [transactions]);
 
-  const [budgets, setBudgets] = useState<Category[]>(() => {
-    const saved = localStorage.getItem('nexora_budgets');
-    return saved ? JSON.parse(saved) : [
-      { name: "Needs", value: 36438, color: "#4eb894" },
-      { name: "Wants", value: 16195, color: "#f2a083" },
-      { name: "Savings", value: 47160, color: "#9a88da" }
-    ];
-  });
+  const budgetUsages = useMemo(() => {
+    // Current month expenses only
+    const now = new Date();
+    const currentMonthTxs = transactions.filter(t => {
+      const d = t.timestamp ? new Date(t.timestamp) : new Date();
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    });
 
-  useEffect(() => {
-    localStorage.setItem('nexora_budgets', JSON.stringify(budgets));
-  }, [budgets]);
+    return budgets.map(b => {
+      const netUsed = currentMonthTxs.filter(t => t.category === b.name).reduce((sum, t) => sum + (-t.amount), 0);
+      const used = Math.max(0, netUsed);
+      return {
+        name: b.name,
+        planned: b.value,
+        used,
+        remaining: Math.max(0, b.value - used),
+        color: b.color
+      };
+    });
+  }, [budgets, transactions]);
 
-  useEffect(() => {
-    localStorage.setItem('nexora_goals', JSON.stringify(goals));
-  }, [goals]);
-
-  useEffect(() => {
-    localStorage.setItem('nexora_investments', JSON.stringify(investments));
-  }, [investments]);
-
-  useEffect(() => {
-    localStorage.setItem('nexora_salary_slips', JSON.stringify(salarySlips));
-  }, [salarySlips]);
+  const financialHealthScore = useMemo(() => {
+    const totalIncome = transactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = Math.abs(transactions.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0));
+    
+    let score = 50; // base score
+    if (totalIncome > 0) {
+      const savingsRate = ((totalIncome - totalExpense) / totalIncome) * 100;
+      // up to 40 points for savings rate (target 40%)
+      score += Math.min(40, savingsRate);
+    }
+    
+    // up to 10 points for goals
+    const goalsAvg = goals.length > 0 ? goals.reduce((sum, g) => sum + g.value, 0) / goals.length : 0;
+    score += (goalsAvg / 100) * 10;
+    
+    return Math.min(100, Math.max(10, Math.round(score)));
+  }, [transactions, goals]);
 
   const addTransaction = (t: Omit<Transaction, 'id' | 'date'>) => {
     const newT: Transaction = {
       ...t,
       id: Math.random().toString(36).substr(2, 9),
-      date: "Just now"
+      date: "Just now",
+      timestamp: Date.now()
     };
     setTransactions(prev => [newT, ...prev]);
   };
@@ -246,11 +303,12 @@ export function AppDataProvider({ children }: { children: React.ReactNode }) {
     <AppDataContext.Provider value={{
       transactions, addTransaction, removeTransaction,
       categories,
-      budgets, addBudget, removeBudget,
+      budgets, addBudget, removeBudget, budgetUsages,
       goals, addGoal, removeGoal, updateGoalAmount,
       investments, addInvestment,
       salarySlips, addSalarySlip,
-      cashFlow: defaultCashFlow
+      cashFlow, financialHealthScore,
+      expectedSalary, setExpectedSalary
     }}>
       {children}
     </AppDataContext.Provider>

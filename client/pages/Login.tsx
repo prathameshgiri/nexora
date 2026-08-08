@@ -126,7 +126,7 @@ export default function Login() {
               <>
                 <label className="block">
                   <span className="mb-2 block text-[11px] font-bold text-[#54746a]">Full Name</span>
-                  <input required type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="John Doe" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
+                  <input required type="text" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Your name" className="h-12 w-full rounded-xl border border-[#dceae4] bg-white px-4 text-sm text-[#31574b] outline-none transition focus:border-[#4eae8b] focus:ring-4 focus:ring-[#d7f1e7]" />
                 </label>
                 <label className="block">
                   <span className="mb-2 block text-[11px] font-bold text-[#54746a]">Mobile Number</span>

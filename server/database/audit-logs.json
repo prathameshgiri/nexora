@@ -201,5 +201,54 @@
     "metadata": {},
     "createdAt": "2026-08-07T15:19:46.781Z",
     "id": "eb8e0557-23f8-4bc3-be29-15c7c7588e3d"
+  },
+  {
+    "action": "auth.login.failed",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T12:11:27.920Z",
+    "id": "954cfcf6-0e1e-4764-af3d-083efc02951e"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T12:11:36.461Z",
+    "id": "5ebe1166-658f-4847-ac2e-26a39f09b12c"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T13:33:09.801Z",
+    "id": "c750548b-3549-48fe-95cb-2754fe20440e"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T13:49:50.120Z",
+    "id": "f1244729-e7ee-4fef-a3a5-d4495a607b2c"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T14:05:10.575Z",
+    "id": "162ea1f3-e29b-4c8f-bf64-05c7db0f8b5f"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T15:35:31.981Z",
+    "id": "e119b42a-1911-4a86-ab89-392591c892f3"
+  },
+  {
+    "action": "auth.login",
+    "userId": "75449ab1-1cdd-4485-a99c-8deba2002e8d",
+    "metadata": {},
+    "createdAt": "2026-08-08T15:54:38.967Z",
+    "id": "e38cf280-bf4c-4d49-8c06-11bb91d1635a"
   }
 ]

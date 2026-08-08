@@ -35,3 +35,5 @@ export function createServer() {
   app.use(errorHandler);
   return app;
 }
+
+// Trigger nodemon restart

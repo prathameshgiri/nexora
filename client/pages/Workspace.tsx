@@ -16,7 +16,7 @@ import { AddSalarySlipModal } from "../components/AddSalarySlipModal";
 import { AddCategoryModal } from "../components/AddCategoryModal";
 const pageMeta: Record<string, { title: string; eyebrow: string; description: string; icon: typeof Wallet; action: string }> = {
   transactions: { title: "Transactions", eyebrow: "MONEY MOVEMENT", description: "Every income and expense, beautifully organized.", icon: ArrowDownRight, action: "Add transaction" },
-  "budget-planner": { title: "Budget planner", eyebrow: "PLAN WITH PURPOSE", description: "Give every rupee a job before the month begins.", icon: PieChart, action: "" },
+  "budget-planner": { title: "Budget planner", eyebrow: "PLAN WITH PURPOSE", description: "Give every rupee a job before the month begins.", icon: PieChart, action: "Create budget" },
   goals: { title: "Financial goals", eyebrow: "YOUR NEXT CHAPTER", description: "Small steps today, bigger possibilities tomorrow.", icon: Target, action: "Add new goal" },
   "salary-slips": { title: "Salary slips", eyebrow: "INCOME RECORDS", description: "Your salary history, safely stored and always accessible.", icon: FileText, action: "Upload salary slip" },
   investments: { title: "Investments", eyebrow: "GROW YOUR WEALTH", description: "Track the money that is working while you sleep.", icon: TrendingUp, action: "Add investment" },
@@ -25,16 +25,14 @@ const pageMeta: Record<string, { title: string; eyebrow: string; description: st
   "profile-settings": { title: "Profile settings", eyebrow: "YOUR PROFILE", description: "Keep your personal and salary details up to date.", icon: UserRound, action: "Save profile" },
   "privacy-security": { title: "Privacy & security", eyebrow: "STAY PROTECTED", description: "Manage your account security and privacy controls.", icon: ShieldCheck, action: "Review security" },
   "ai-coach": { title: "AI Coach", eyebrow: "ROLE-BASED ADVISOR", description: "Personalized financial guidance from your chosen AI persona.", icon: Sparkles, action: "New session" },
+  admin: { title: "Admin Panel", eyebrow: "SYSTEM MANAGEMENT", description: "Manage users, monitor platform activity, and view global metrics.", icon: ShieldCheck, action: "" },
 };
 
 export const nav = [
-  ["Overview", "/dashboard", LayoutDashboard], ["Transactions", "/transactions", ArrowDownRight], ["Budget planner", "/budget-planner", PieChart], ["Goals", "/goals", Target], ["AI Coach", "/ai-coach", Sparkles], ["Salary slips", "/salary-slips", FileText], ["Investments", "/investments", TrendingUp], ["Financial health", "/financial-health", ShieldCheck],
+  ["Overview", "/dashboard", LayoutDashboard], ["Transactions", "/transactions", ArrowDownRight], ["Budget planner", "/budget-planner", PieChart], ["Goals", "/goals", Target], ["AI Coach", "/ai-coach", Sparkles], ["Salary slips", "/salary-slips", FileText], ["Investments", "/investments", TrendingUp], ["Financial health", "/financial-health", ShieldCheck]
 ] as const;
-const cashFlow = [{ m: "Jan", income: 72, expense: 45 }, { m: "Feb", income: 78, expense: 50 }, { m: "Mar", income: 74, expense: 44 }, { m: "Apr", income: 83, expense: 55 }, { m: "May", income: 88, expense: 48 }, { m: "Jun", income: 91, expense: 52 }];
-const categories = [{ name: "Housing", value: 18500, color: "#4eb894" }, { name: "Food & dining", value: 8500, color: "#f2a083" }, { name: "Transport", value: 5200, color: "#9a88da" }, { name: "Lifestyle", value: 4100, color: "#78aeca" }];
-const rows = [{ name: "Apartment rent", type: "Housing", date: "Today, 9:42 AM", amount: "−₹18,500", icon: Home, tone: "coral" }, { name: "Salary credited", type: "Income", date: "Jul 01, 2024", amount: "+₹92,000", icon: Wallet, tone: "mint" }, { name: "Netflix subscription", type: "Entertainment", date: "Jun 30, 2024", amount: "−₹649", icon: CreditCard, tone: "lavender" }, { name: "Freelance project", type: "Additional income", date: "Jun 28, 2024", amount: "+₹12,500", icon: Zap, tone: "blue" }];
 
-export function Shell({ children, meta, onAction }: { children: React.ReactNode; meta?: (typeof pageMeta)[string]; onAction?: () => void }) {
+export function Shell({ children, meta, onAction }: { children: React.ReactNode; meta?: any; onAction?: () => void }) {
   const location = useLocation(); const [open, setOpen] = useState(false); const [menu, setMenu] = useState(false); const [coachOpen, setCoachOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -163,82 +161,86 @@ function Transactions() {
 }
 
 
-const ROLE_CONFIG = {
-  friendly: {
-    name: "Aria",
-    title: "Friendly Coach",
-    color: "#1f9b78",
-    darkColor: "#4eba94",
-    bg: "from-emerald-500/10 to-teal-500/5",
-    border: "border-emerald-500/20",
-    accent: "#1f7a63",
-    avatar: "✦",
-    greeting: "Hey there! I'm Aria, your personal financial coach. I've been looking at your recent activity — you're doing really well! Your savings rate is above target. What's on your mind today?",
-    suggestions: [
-      "How can I save more this month?",
-      "Am I on track for my Emergency Fund?",
-      "Any tips to reduce my expenses?",
-      "How do I start investing?",
-    ],
-    replies: {
-      save: "You're already doing great with 44.7% savings! Small wins: try a ₹500/week 'no-spend challenge' on weekdays. You saved ₹12,500 from freelance last month — try auto-transferring 20% of any bonus income directly to your Emergency Fund!",
-      emergency: "You're 68% there — that's amazing! At your current pace, you'll hit ₹3,00,000 in about 6 weeks. Keep it up! 🎉",
-      reduce: "I noticed you spent ₹649 on Netflix this month. Sharing a family plan could save you ~₹350/mo. Also, your dining spend seems a bit high — meal prepping even 2 days a week can save ₹1,500+!",
-      invest: "Great question! Since you already have a growing Emergency Fund, maybe start with a small SIP — even ₹2,000/month in a Nifty 50 index fund is a solid start. You're doing well!",
-      default: "That's a great question! Based on your current spending patterns, you're in a really healthy position. Your savings rate of 44.7% is well above the recommended 30%. Keep maintaining this momentum and you'll reach your MacBook Pro goal ahead of schedule!",
+const getRoleConfig = (metrics: any) => {
+  const { savingsRate, totalIncome, totalExpense, efProgress, efTarget, entertainmentSpend, lifestyleSpend, housingSpend, foodSpend, activeGoals } = metrics;
+  
+  return {
+    friendly: {
+      name: "Aria",
+      title: "Friendly Coach",
+      color: "#1f9b78",
+      darkColor: "#4eba94",
+      bg: "from-emerald-500/10 to-teal-500/5",
+      border: "border-emerald-500/20",
+      accent: "#1f7a63",
+      avatar: "✦",
+      greeting: `Hey there! I'm Aria, your personal financial coach. I've been looking at your recent activity — you're doing really well! Your savings rate is ${savingsRate >= 40 ? 'above target' : 'getting there'}. What's on your mind today?`,
+      suggestions: [
+        "How can I save more this month?",
+        "Am I on track for my Emergency Fund?",
+        "Any tips to reduce my expenses?",
+        "How do I start investing?",
+      ],
+      replies: {
+        save: `You're already doing great with ${savingsRate}% savings! Small wins: try a ₹500/week 'no-spend challenge' on weekdays. You have a monthly surplus of ₹${(totalIncome - totalExpense).toLocaleString()} — try auto-transferring 20% directly to your Emergency Fund!`,
+        emergency: `You're ${efProgress}% there — that's amazing! Keep it up! 🎉`,
+        reduce: `I noticed you spent ₹${entertainmentSpend.toLocaleString()} on entertainment this month. Sharing a family plan could save you some money. Also, your dining spend is ₹${foodSpend.toLocaleString()} — meal prepping even 2 days a week can save you!`,
+        invest: "Great question! Since you have a growing Emergency Fund, maybe start with a small SIP — even ₹2,000/month in a Nifty 50 index fund is a solid start. You're doing well!",
+        default: `That's a great question! Based on your current spending patterns, you're in a really healthy position. Your savings rate of ${savingsRate}% is ${savingsRate >= 30 ? 'well above' : 'close to'} the recommended 30%. Keep maintaining this momentum!`,
+      },
     },
-  },
-  strict: {
-    name: "Rex",
-    title: "Strict Advisor",
-    color: "#dc6b3f",
-    darkColor: "#f0926b",
-    bg: "from-orange-500/10 to-red-500/5",
-    border: "border-orange-500/20",
-    accent: "#b85530",
-    avatar: "⬡",
-    greeting: "I'm Rex. I don't sugarcoat things. I've analyzed your data — your savings rate is acceptable, but there are inefficiencies. Your discretionary spending needs attention immediately. What do you want to address?",
-    suggestions: [
-      "Where am I wasting money?",
-      "How do I reach goals faster?",
-      "Am I being financially disciplined?",
-      "What should I cut first?",
-    ],
-    replies: {
-      save: "You spent ₹649 on Netflix last month. That's ₹7,788 per year — gone. If you're serious about the MacBook Pro goal, eliminate non-essentials immediately. Every rupee wasted is a day further from your goal. No compromises.",
-      emergency: "68% completion after X months is not impressive enough. You should be saving a minimum of ₹10,000 per month toward this — non-negotiable. The rest of your spending must be restructured around this priority.",
-      reduce: "Entertainment: ₹649. Lifestyle: ₹4,100. These are luxuries. Cut them in half, minimum. Redirect the savings into your goals. Comfort now means struggle later. Make the hard choice.",
-      invest: "You haven't started investing yet? Every month you delay is compounded losses over time. Open a basic Nifty 50 SIP today — minimum ₹5,000/month. Stop overthinking and act.",
-      default: "Your numbers show potential, but you're coasting. 44.7% savings rate is good, not great. To achieve financial independence, you need to push to 55%+ and eliminate all non-essential spending immediately.",
+    strict: {
+      name: "Rex",
+      title: "Strict Advisor",
+      color: "#dc6b3f",
+      darkColor: "#f0926b",
+      bg: "from-orange-500/10 to-red-500/5",
+      border: "border-orange-500/20",
+      accent: "#b85530",
+      avatar: "⬡",
+      greeting: `I'm Rex. I don't sugarcoat things. I've analyzed your data — your savings rate is ${savingsRate}%. Your discretionary spending needs attention immediately. What do you want to address?`,
+      suggestions: [
+        "Where am I wasting money?",
+        "How do I reach goals faster?",
+        "Am I being financially disciplined?",
+        "What should I cut first?",
+      ],
+      replies: {
+        save: `You spent ₹${entertainmentSpend.toLocaleString()} on entertainment last month. If you're serious about your goals, eliminate non-essentials immediately. Every rupee wasted is a day further from your goal. No compromises.`,
+        emergency: `${efProgress}% completion toward your ₹${efTarget.toLocaleString()} goal is not impressive enough. You should be saving a minimum of ₹10,000 per month toward this — non-negotiable. The rest of your spending must be restructured around this priority.`,
+        reduce: `Entertainment: ₹${entertainmentSpend.toLocaleString()}. Lifestyle: ₹${lifestyleSpend.toLocaleString()}. These are luxuries. Cut them in half, minimum. Redirect the savings into your goals. Comfort now means struggle later. Make the hard choice.`,
+        invest: "You haven't started investing yet? Every month you delay is compounded losses over time. Open a basic Nifty 50 SIP today — minimum ₹5,000/month. Stop overthinking and act.",
+        default: `Your numbers show potential, but you're coasting. ${savingsRate}% savings rate is good, not great. To achieve financial independence, you need to push to 55%+ and eliminate all non-essential spending immediately.`,
+      },
     },
-  },
-  analyst: {
-    name: "Sigma",
-    title: "Data Analyst",
-    color: "#6b5fd4",
-    darkColor: "#9a88dd",
-    bg: "from-violet-500/10 to-purple-500/5",
-    border: "border-violet-500/20",
-    accent: "#4d41a8",
-    avatar: "∑",
-    greeting: "Sigma initialized. Scanning financial profile... Savings rate: 44.7% (benchmark: 40% ✓). Expense ratio: 55.3%. 3 active goals detected. Emergency fund: 68% funded. Awaiting query.",
-    suggestions: [
-      "Run a savings rate analysis",
-      "Forecast goal completion dates",
-      "Analyze my spending patterns",
-      "Show my investment projections",
-    ],
-    replies: {
-      save: "Current savings rate: 44.7% (↑4.7% above 40% benchmark). Monthly surplus: ₹41,160. If allocated 100% to savings: goal completion accelerated by 2.3 months. Recommended: auto-invest ₹5,000/month via SIP to grow corpus at projected 12-14% CAGR.",
-      emergency: "Emergency fund status: ₹2,04,000 / ₹3,00,000 (68%). Deficit: ₹96,000. At current savings velocity of ₹5,000/month toward this goal: ETA 19.2 weeks. Accelerating to ₹8,000/month: ETA 12 weeks. Recommend velocity increase.",
-      reduce: "Expense breakdown — Housing: 45.1% | Food: 20.7% | Entertainment: 1.6% | Transport: 12.7% | Lifestyle: 10.0%. Entertainment and Lifestyle combined at 11.6% — above optimal 8% threshold. Reduction of ₹1,500 in Lifestyle would improve savings rate by 3.6%.",
-      invest: "Investment corpus recommendation: Based on ₹41,160 monthly surplus, optimal allocation — Equity SIP: 60% (₹24,696) | Debt funds: 25% (₹10,290) | Gold: 15% (₹6,174). Projected 10Y corpus at 12% CAGR: ₹57.4L.",
-      default: "Data analysis complete. Key metrics: Net income ₹1,04,500 | Expenses ₹57,840 | Savings ₹46,660 | Rate 44.67%. Anomaly detected: Transaction volatility up 8.4% month-over-month. No critical threshold breaches. System status: Optimal.",
+    analyst: {
+      name: "Sigma",
+      title: "Data Analyst",
+      color: "#6b5fd4",
+      darkColor: "#9a88dd",
+      bg: "from-violet-500/10 to-purple-500/5",
+      border: "border-violet-500/20",
+      accent: "#4d41a8",
+      avatar: "∑",
+      greeting: `Sigma initialized. Scanning financial profile... Savings rate: ${savingsRate}% (benchmark: 40%). Expense ratio: ${(100 - savingsRate).toFixed(1)}%. ${activeGoals} active goals detected. Emergency fund: ${efProgress}% funded. Awaiting query.`,
+      suggestions: [
+        "Run a savings rate analysis",
+        "Forecast goal completion dates",
+        "Analyze my spending patterns",
+        "Show my investment projections",
+      ],
+      replies: {
+        save: `Current savings rate: ${savingsRate}%. Monthly surplus: ₹${(totalIncome - totalExpense).toLocaleString()}. If allocated 100% to savings: goal completion accelerated by 2.3 months. Recommended: auto-invest ₹5,000/month via SIP to grow corpus at projected 12-14% CAGR.`,
+        emergency: `Emergency fund status: ${efProgress}%. Deficit: ₹${(efTarget - (efTarget * efProgress / 100)).toLocaleString()}. Recommend velocity increase.`,
+        reduce: `Expense breakdown — Housing: ₹${housingSpend.toLocaleString()} | Food: ₹${foodSpend.toLocaleString()} | Entertainment: ₹${entertainmentSpend.toLocaleString()} | Lifestyle: ₹${lifestyleSpend.toLocaleString()}. Reduction of ₹1,500 in Lifestyle would improve savings rate by 3.6%.`,
+        invest: `Investment corpus recommendation: Based on ₹${(totalIncome - totalExpense).toLocaleString()} monthly surplus, optimal allocation — Equity SIP: 60% | Debt funds: 25% | Gold: 15%. Projected 10Y corpus at 12% CAGR: ₹57.4L.`,
+        default: `Data analysis complete. Key metrics: Net income ₹${totalIncome.toLocaleString()} | Expenses ₹${totalExpense.toLocaleString()} | Savings ₹${(totalIncome - totalExpense).toLocaleString()} | Rate ${savingsRate}%. System status: Optimal.`,
+      },
     },
-  },
+  };
 };
 
-type RoleKey = keyof typeof ROLE_CONFIG;
+type RoleKey = 'friendly' | 'strict' | 'analyst';
 
 function TypewriterText({ text, onDone }: { text: string; onDone?: () => void }) {
   const [displayed, setDisplayed] = useState("");
@@ -254,6 +256,31 @@ function TypewriterText({ text, onDone }: { text: string; onDone?: () => void })
 
 function AICoachPage() {
   const { user } = useAuth();
+  const { transactions, goals } = useAppData();
+  const totalIncome = transactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+  const totalExpense = Math.abs(transactions.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0));
+  const savingsRate = totalIncome > 0 ? (((totalIncome - totalExpense) / totalIncome) * 100).toFixed(1) : "0.0";
+  const efGoal = goals.find(g => g.label.toLowerCase().includes("emergency"));
+  const efProgress = efGoal ? efGoal.value : 0;
+  const efTarget = efGoal ? efGoal.targetAmount : 300000;
+  
+  const currentMonthTxs = transactions.filter(t => {
+    const d = t.timestamp ? new Date(t.timestamp) : new Date();
+    const now = new Date();
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  });
+  
+  const entertainmentSpend = Math.abs(currentMonthTxs.filter(t => t.category === "Entertainment").reduce((sum, t) => sum + t.amount, 0));
+  const lifestyleSpend = Math.abs(currentMonthTxs.filter(t => t.category === "Lifestyle").reduce((sum, t) => sum + t.amount, 0));
+  const housingSpend = Math.abs(currentMonthTxs.filter(t => t.category === "Housing").reduce((sum, t) => sum + t.amount, 0));
+  const foodSpend = Math.abs(currentMonthTxs.filter(t => t.category === "Food & dining").reduce((sum, t) => sum + t.amount, 0));
+  const activeGoals = goals.length;
+
+  const ROLE_CONFIG = getRoleConfig({ 
+    savingsRate, totalIncome, totalExpense, efProgress, efTarget, 
+    entertainmentSpend, lifestyleSpend, housingSpend, foodSpend, activeGoals 
+  });
+
   const [role, setRole] = useState<RoleKey>("friendly");
   const [messages, setMessages] = useState<{ role: string; text: string; typing?: boolean }[]>([]);
   const [input, setInput] = useState("");
@@ -274,7 +301,7 @@ function AICoachPage() {
       setInitialized(true);
     }, 400);
     return () => clearTimeout(t);
-  }, [role]);
+  }, [role, ROLE_CONFIG]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -464,20 +491,22 @@ function AICoachPage() {
 }
 
 function Planner({ kind }: { kind: string }) { 
-  const { goals, categories, budgets, cashFlow, removeGoal, updateGoalAmount } = useAppData();
+  const { goals, removeGoal, updateGoalAmount, budgetUsages, removeBudget, addTransaction } = useAppData();
   const [showAdd, setShowAdd] = useState(false);
+  const [inputAmounts, setInputAmounts] = useState<Record<string, string>>({});
   const meta = pageMeta[kind]; 
   
-  // For budget planner, we'll use budgets. For goals, we use the global goals state.
   const data = kind === "budget-planner" 
-    ? budgets.map(b => ({ id: b.name, label: b.name, value: Math.min(100, (b.value / 100000) * 100).toFixed(0), amount: `₹${b.value.toLocaleString()}`, color: b.color })) 
-    : goals.map(g => ({ id: g.id, label: g.label, value: g.value, amount: `₹${g.currentAmount.toLocaleString()} / ₹${g.targetAmount.toLocaleString()}`, color: g.color })); 
+    ? budgetUsages.map(b => ({ id: b.name, label: b.name, value: b.planned > 0 ? Math.min(100, (b.used / b.planned) * 100).toFixed(0) : "0", amount: "", color: b.color, currentAmount: b.used, targetAmount: b.planned })) 
+    : goals.map(g => ({ id: g.id, label: g.label, value: g.value, amount: "", color: g.color, currentAmount: g.currentAmount, targetAmount: g.targetAmount })); 
+
+  const currentMonthName = new Date().toLocaleString('default', { month: 'long' });
 
   return (
     <>
-      <Shell meta={meta} onAction={kind === "goals" ? () => setShowAdd(true) : undefined}>
+      <Shell meta={meta} onAction={() => setShowAdd(true)}>
         <div className="grid gap-5 xl:grid-cols-[1.1fr_.9fr]">
-          <Section title={kind === "goals" ? "Your progress" : "July allocation"} subtitle={kind === "goals" ? "Three dreams in motion" : "Planned versus actual spending"}>
+          <Section title={kind === "goals" ? "Your progress" : `${currentMonthName} allocation`} subtitle={kind === "goals" ? "Your dreams in motion" : "Planned versus actual spending"}>
             <div className="space-y-6">
               {data.map(d => (
                 <div key={d.label} className="group relative">
@@ -486,21 +515,54 @@ function Planner({ kind }: { kind: string }) {
                     <span className="text-[11px] font-extrabold" style={{ color: d.color }}>{d.value}%</span>
                   </div>
                   <Progress value={Number(d.value)} color={d.color} />
-                  <p className="mt-2 text-[10px] text-[#9aada7] dark:text-muted-foreground">{d.amount}</p>
                   
-                  {kind === "goals" && (
-                    <div className="absolute right-0 top-6 ml-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => updateGoalAmount(d.id, 5000)} className="rounded-lg p-1 text-muted-foreground hover:bg-primary/10 hover:text-primary">
-                        <Plus size={15} />
-                      </button>
-                      <button onClick={() => updateGoalAmount(d.id, -5000)} className="rounded-lg p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
-                        <Minus size={15} />
-                      </button>
-                      <button onClick={() => removeGoal(d.id)} className="rounded-lg p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
-                        <X size={15} />
-                      </button>
-                    </div>
-                  )}
+                  <div className="mt-2 flex flex-col gap-2">
+                    <p className="text-[10px] text-[#9aada7] dark:text-muted-foreground">
+                      ₹<CountUp end={d.currentAmount} duration={1} separator="," /> / ₹<CountUp end={d.targetAmount} duration={1} separator="," />
+                    </p>
+                    
+                    {kind === "goals" || kind === "budget-planner" ? (
+                      <div className="flex items-center gap-2">
+                        <input 
+                          type="number"
+                          placeholder="Amount (₹)"
+                          value={inputAmounts[d.id] || ""}
+                          onChange={e => setInputAmounts({...inputAmounts, [d.id]: e.target.value})}
+                          className="w-24 rounded-lg border border-border bg-transparent px-2 py-1 text-[11px] text-foreground outline-none focus:border-[#4eb894]"
+                        />
+                        <button onClick={() => {
+                          const amt = Number(inputAmounts[d.id]);
+                          if (amt) {
+                            if (kind === "goals") {
+                              updateGoalAmount(d.id, amt);
+                            } else {
+                              addTransaction({ name: `${d.label} add`, amount: -amt, category: d.label, iconName: "Wallet", type: "Expense" });
+                            }
+                          }
+                          setInputAmounts({...inputAmounts, [d.id]: ""});
+                        }} className="rounded-lg bg-[#edf8f3] dark:bg-primary/10 p-1.5 text-[#2b9b78] dark:text-primary transition hover:bg-[#d1efe3] dark:hover:bg-primary/20" title="Add">
+                          <Plus size={14} />
+                        </button>
+                        <button onClick={() => {
+                          const amt = Number(inputAmounts[d.id]);
+                          if (amt) {
+                            if (kind === "goals") {
+                              updateGoalAmount(d.id, -amt);
+                            } else {
+                              addTransaction({ name: `${d.label} refund`, amount: amt, category: d.label, iconName: "Wallet", type: "Income" });
+                            }
+                          }
+                          setInputAmounts({...inputAmounts, [d.id]: ""});
+                        }} className="rounded-lg bg-red-50 dark:bg-red-500/10 p-1.5 text-red-500 transition hover:bg-red-100 dark:hover:bg-red-500/20" title="Subtract">
+                          <Minus size={14} />
+                        </button>
+                        <div className="flex-1" />
+                        <button onClick={() => kind === "goals" ? removeGoal(d.id) : removeBudget(d.id)} className="rounded-lg p-1.5 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive" title="Delete">
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               ))}
               {data.length === 0 && <p className="text-sm text-muted-foreground py-4">No data yet.</p>}
@@ -517,12 +579,24 @@ function Planner({ kind }: { kind: string }) {
         <div className="mt-5 grid gap-5 md:grid-cols-2">
           <Section title="Monthly snapshot" subtitle="A quick view of your numbers">
             <div className="grid grid-cols-2 gap-4">
-              {[["Planned", "₹72,000"], ["Used", "₹57,840"], ["Remaining", "₹14,160"], ["On track", "Yes"]].map(([a, b]) => (
-                <div className="rounded-xl bg-[#f6faf8] dark:bg-secondary p-3" key={a}>
-                  <p className="text-[10px] text-[#8fa59e] dark:text-muted-foreground">{a}</p>
-                  <p className="mt-1 text-lg font-extrabold text-foreground">{b}</p>
-                </div>
-              ))}
+              {(() => {
+                const totalPlanned = budgetUsages.reduce((sum, b) => sum + b.planned, 0);
+                const totalUsed = budgetUsages.reduce((sum, b) => sum + b.used, 0);
+                const totalRemaining = Math.max(0, totalPlanned - totalUsed);
+                const isOffTrack = totalUsed > totalPlanned;
+                
+                return [
+                  ["Planned", `₹${totalPlanned.toLocaleString()}`], 
+                  ["Used", `₹${totalUsed.toLocaleString()}`], 
+                  ["Remaining", `₹${totalRemaining.toLocaleString()}`], 
+                  ["On track", isOffTrack ? "No" : "Yes"]
+                ].map(([a, b]) => (
+                  <div className="rounded-xl bg-[#f6faf8] dark:bg-secondary p-3" key={a}>
+                    <p className="text-[10px] text-[#8fa59e] dark:text-muted-foreground">{a}</p>
+                    <p className="mt-1 text-lg font-extrabold text-foreground">{b}</p>
+                  </div>
+                ));
+              })()}
             </div>
           </Section>
           <Section title="Smart suggestions" subtitle="Personalized for you">
@@ -569,7 +643,7 @@ function SettingsPage() {
 
 function ProfileSettings() { 
   const { user } = useAuth();
-  const [salary, setSalary] = useState("120000");
+  const { expectedSalary, setExpectedSalary } = useAppData();
   const [payDate, setPayDate] = useState("1");
   const [saved, setSaved] = useState(false);
   return (
@@ -602,7 +676,7 @@ function ProfileSettings() {
               <span className="mb-2 block text-[11px] font-bold text-[#55766c] dark:text-muted-foreground">Monthly salary</span>
               <div className="relative">
                 <span className="absolute left-3 top-3 text-sm font-bold text-[#7e9990]">₹</span>
-                <input value={salary} onChange={e => { setSalary(e.target.value); setSaved(false); }} className="h-11 w-full rounded-xl border border-[#dceae4] dark:border-border bg-transparent pl-8 pr-3 text-sm font-bold text-foreground outline-none focus:border-[#4eae8b]" />
+                <input type="number" value={expectedSalary || ""} onChange={e => { setExpectedSalary(Number(e.target.value)); setSaved(false); }} className="h-11 w-full rounded-xl border border-[#dceae4] dark:border-border bg-transparent pl-8 pr-3 text-sm font-bold text-foreground outline-none focus:border-[#4eae8b]" />
               </div>
             </label>
             <label className="block">
@@ -615,7 +689,7 @@ function ProfileSettings() {
           </div>
           <div className="mt-4 rounded-xl bg-[#f4faf7] dark:bg-secondary p-4">
             <p className="text-[11px] font-bold text-[#55766c] dark:text-muted-foreground">Next expected salary</p>
-            <p className="mt-1 text-lg font-extrabold text-[#205c4c] dark:text-foreground">₹{Number(salary || 0).toLocaleString()} <span className="text-[11px] font-semibold text-[#8ca29a] dark:text-muted-foreground">on the {payDate || "1"}{["1", "21", "31"].includes(payDate) ? "st" : ["2", "22"].includes(payDate) ? "nd" : ["3", "23"].includes(payDate) ? "rd" : "th"}</span></p>
+            <p className="mt-1 text-lg font-extrabold text-[#205c4c] dark:text-foreground">₹{Number(expectedSalary || 0).toLocaleString()} <span className="text-[11px] font-semibold text-[#8ca29a] dark:text-muted-foreground">on the {payDate || "1"}{["1", "21", "31"].includes(payDate) ? "st" : ["2", "22"].includes(payDate) ? "nd" : ["3", "23"].includes(payDate) ? "rd" : "th"}</span></p>
           </div>
           <button onClick={() => setSaved(true)} className="mt-5 rounded-xl bg-[#1f7a63] px-5 py-3 text-xs font-bold text-white">{saved ? "Saved successfully" : "Save payment details"}</button>
         </Section>
@@ -739,14 +813,28 @@ function Investments() {
 }
 
 function Health() {
-  const { cashFlow } = useAppData();
+  const { cashFlow, financialHealthScore, transactions, goals, investments } = useAppData();
+  
+  const totalIncome = transactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+  const totalExpense = Math.abs(transactions.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0));
+  const currentBalance = totalIncome - totalExpense;
+  const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
+  
+  const totalInvestments = investments.reduce((sum, inv) => sum + inv.value, 0);
+  const totalPortfolio = currentBalance + totalInvestments;
+  
+  const efGoal = goals.find(g => g.label.toLowerCase().includes("emergency"));
+  const efProgress = efGoal ? (efGoal.value / efGoal.targetAmount) * 100 : 0;
+  
+  const avgGoalProgress = goals.length > 0 ? goals.reduce((sum, g) => sum + (g.value / g.targetAmount) * 100, 0) / goals.length : 0;
+
   return (
     <Shell meta={pageMeta["financial-health"]}>
       <div className="grid gap-5 xl:grid-cols-[1.25fr_.75fr]">
         <Section title="Portfolio overview" subtitle="Value across your accounts">
           <div className="flex items-end gap-3">
-            <p className="text-3xl font-extrabold text-foreground">₹4,82,650</p>
-            <span className="mb-1 text-[11px] font-bold text-[#2b9b78]">+14.8%</span>
+            <p className="text-3xl font-extrabold text-foreground">₹<CountUp end={totalPortfolio} duration={1} separator="," /></p>
+            <span className="mb-1 text-[11px] font-bold text-[#2b9b78]">Dynamic</span>
           </div>
           <div className="mt-5">
             <ResponsiveContainer width="100%" height={180}>
@@ -760,32 +848,35 @@ function Health() {
         </Section>
         <Section title="Health score" subtitle="Based on your complete picture">
           <div className="flex items-center gap-5">
-            <div className="score-orb h-24 w-24 text-2xl">82</div>
+            <div className="score-orb h-24 w-24 text-2xl"><CountUp end={financialHealthScore} duration={2} /></div>
             <div>
-              <p className="text-lg font-extrabold text-foreground">Excellent</p>
-              <p className="mt-1 text-[11px] leading-relaxed text-[#8ca29a] dark:text-muted-foreground">You are building a strong financial foundation.</p>
+              <p className="text-lg font-extrabold text-foreground">{financialHealthScore >= 80 ? "Excellent" : financialHealthScore >= 50 ? "Good" : "Needs Attention"}</p>
+              <p className="mt-1 text-[11px] leading-relaxed text-[#8ca29a] dark:text-muted-foreground">{financialHealthScore >= 80 ? "You are building a strong financial foundation." : "Small changes can significantly improve your score."}</p>
             </div>
           </div>
         </Section>
       </div>
       <div className="mt-5 grid gap-5 md:grid-cols-3">
         {["Account summary", "Recent activity", "Next best action"].map((t, i) => (
-          <Section title={t} subtitle={i === 0 ? "Updated just now" : i === 1 ? "Last 30 days" : "AI recommendation"} key={t}>
-            <p className="text-xl font-extrabold text-foreground">{["₹1,84,260", "18 activities", "Save ₹1,500"][i]}</p>
-            <p className="mt-2 text-[10px] leading-relaxed text-[#8ca29a] dark:text-muted-foreground">{["Across all linked accounts", "Everything looks secure", "Reach your goal sooner"][i]}</p>
+          <Section title={t} subtitle={i === 0 ? "Updated just now" : i === 1 ? "Total this month" : "AI recommendation"} key={t}>
+            <p className="text-xl font-extrabold text-foreground">{i === 0 ? `₹${totalPortfolio.toLocaleString()}` : i === 1 ? `${transactions.length} activities` : "Review Goals"}</p>
+            <p className="mt-2 text-[10px] leading-relaxed text-[#8ca29a] dark:text-muted-foreground">{i === 0 ? "Across all linked accounts" : i === 1 ? "Everything looks secure" : "Stay on top of your targets"}</p>
           </Section>
         ))}
       </div>
       <div className="mt-5">
         <Section title="Detailed insights" subtitle="A closer look at your financial condition">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {["Savings rate", "Debt ratio", "Emergency fund", "Goal progress"].map((t, i) => (
-              <div className="rounded-xl bg-[#f5faf7] dark:bg-secondary p-4" key={t}>
-                <p className="text-[10px] text-[#8ca29a] dark:text-muted-foreground">{t}</p>
-                <p className="mt-2 text-lg font-extrabold text-foreground">{["44.7%", "18.2%", "68%", "52%"][i]}</p>
-                <Progress value={[82, 66, 68, 52][i]} />
-              </div>
-            ))}
+            {["Savings rate", "Debt ratio", "Emergency fund", "Goal progress"].map((t, i) => {
+              const val = [savingsRate, 0, efProgress, avgGoalProgress][i];
+              return (
+                <div className="rounded-xl bg-[#f5faf7] dark:bg-secondary p-4" key={t}>
+                  <p className="text-[10px] text-[#8ca29a] dark:text-muted-foreground">{t}</p>
+                  <p className="mt-2 text-lg font-extrabold text-foreground">{val.toFixed(1)}%</p>
+                  <Progress value={val} />
+                </div>
+              );
+            })}
           </div>
         </Section>
       </div>
@@ -793,7 +884,7 @@ function Health() {
         <Section title="Recommendations" subtitle="Small changes with meaningful impact">
           <div className="flex items-start gap-3 rounded-xl bg-[#edf8f3] dark:bg-primary/20 p-4">
             <Sparkles className="mt-0.5 text-[#2b9b78] dark:text-primary" size={17} />
-            <p className="text-[11px] leading-relaxed text-[#5d8377] dark:text-primary-foreground/80">Your financial condition improved compared to last month. Keep discretionary spending below ₹18,000 to maintain this trajectory.</p>
+            <p className="text-[11px] leading-relaxed text-[#5d8377] dark:text-primary-foreground/80">{financialHealthScore >= 80 ? "Your financial condition improved compared to last month. Keep discretionary spending below your planned budget to maintain this trajectory." : "Focus on building your emergency fund and keeping discretionary spending low to quickly improve your health score."}</p>
           </div>
         </Section>
       </div>
