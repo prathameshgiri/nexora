@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useAppData } from "../context/AppDataContext";
 import { Shell } from "./Workspace";
-import { ShieldCheck, UserRound, Mail, DollarSign, Activity, ArrowUpRight, ArrowDownRight, CreditCard, Wallet, FileText, Zap, Home, TrendingUp, PieChart, Target, RefreshCw } from "lucide-react";
+import { ShieldCheck, UserRound, Mail, DollarSign, Activity, ArrowUpRight, ArrowDownRight, CreditCard, Wallet, FileText, Zap, Home, TrendingUp, PieChart, Target, RefreshCw, Download, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 
@@ -76,6 +76,53 @@ export default function Admin() {
     .catch(console.error);
   };
 
+  const deleteUser = async () => {
+    if (!activeUser || !confirm(`Are you sure you want to completely delete ${activeUser.fullName}? This cannot be undone.`)) return;
+    
+    const token = localStorage.getItem("accessToken");
+    try {
+      const res = await fetch(`/api/auth/users/${activeUser.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        alert("User deleted successfully!");
+        fetchUsers();
+        setSelectedUser(null);
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error deleting user.");
+    }
+  };
+
+  const downloadCSV = () => {
+    if (!activeUser || activeTransactions.length === 0) return;
+    
+    const headers = ["ID", "Date", "Category", "Details", "Amount", "Type"];
+    const rows = activeTransactions.map((t: any) => [
+      t.id,
+      new Date(t.date).toLocaleDateString(),
+      t.category,
+      (t.details || "").replace(/,/g, ""), // remove commas to prevent csv breaking
+      t.amount,
+      t.amount >= 0 ? "Income" : "Expense"
+    ]);
+    
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `transactions_${activeUser.id}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchUsers();
@@ -132,7 +179,7 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-[#f7faf8] dark:bg-background p-6 md:p-12">
-      <div className="mx-auto max-w-6xl space-y-8">
+      <div className="mx-auto w-full space-y-8">
         
         {/* Admin Header */}
         <div className="flex items-center justify-between border-b border-border pb-6">
@@ -296,6 +343,11 @@ export default function Admin() {
                 <p className="mt-1 text-xs font-semibold text-white">Aug 2026</p>
               </div>
             </div>
+
+            <button onClick={deleteUser} className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/20 px-4 py-3 text-sm font-bold text-red-100 transition hover:bg-red-500/40">
+              <Trash2 size={16} />
+              Delete Account
+            </button>
           </div>
           
           {/* Income & Stats */}
@@ -347,8 +399,15 @@ export default function Admin() {
               <h2 className="text-[15px] font-extrabold text-foreground">Transaction Ledger</h2>
               <p className="mt-1 text-xs text-muted-foreground">Activity log for the selected user</p>
             </div>
-            <div className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-muted-foreground">
-              {activeTransactions.length} records found
+            <div className="flex items-center gap-3">
+              {activeTransactions.length > 0 && (
+                <button onClick={downloadCSV} className="flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-primary/20">
+                  <Download size={14} /> Export CSV
+                </button>
+              )}
+              <div className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-muted-foreground">
+                {activeTransactions.length} records found
+              </div>
             </div>
           </div>
           

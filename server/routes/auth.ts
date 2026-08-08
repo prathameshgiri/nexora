@@ -6,7 +6,7 @@ import { config } from "../config";
 import { authenticate } from "../middleware/auth";
 import { validate } from "../middleware/validation";
 import { audit } from "../services/audit";
-import { insert, readDb, update } from "../utils/json-db";
+import { insert, readDb, update, remove } from "../utils/json-db";
 import { fail, ok } from "../utils/api";
 import type { User } from "../types";
 const router = Router();
@@ -17,6 +17,14 @@ router.post("/register", validate(credentials.extend({ fullName: z.string().min(
 router.post("/login", validate(credentials), async (req, res) => { const users = await readDb<User>("users"); const user = users.find(u => u.email === req.body.email); if (!user || user.lockUntil && new Date(user.lockUntil) > new Date() || !(user && await bcrypt.compare(req.body.password, user.passwordHash))) { if (user) await update<User>("users", user.id, { failedLoginAttempts: user.failedLoginAttempts + 1, lockUntil: user.failedLoginAttempts >= 4 ? new Date(Date.now() + 15 * 60_000).toISOString() : undefined }); await audit("auth.login.failed", user?.id); return fail(res, "Invalid email or password", 401); } await update<User>("users", user.id, { failedLoginAttempts: 0, lockUntil: undefined, loginHistory: [...user.loginHistory, new Date().toISOString()].slice(-20) }); await audit("auth.login", user.id); return ok(res, { user: safeUser(user), ...tokens(user) }, "Signed in"); });
 router.get("/me", authenticate, (req, res) => ok(res, safeUser(req.auth!.user)));
 router.get("/users", async (req, res) => { const users = await readDb<User>("users"); return ok(res, users.map(safeUser)); });
+router.delete("/users/:id", async (req, res) => {
+  const success = await remove<User>("users", req.params.id);
+  if (success) {
+    await audit("user.deleted", req.params.id);
+    return ok(res, null, "User deleted successfully");
+  }
+  return fail(res, "User not found", 404);
+});
 router.post("/refresh", (req, res) => { try { const payload = jwt.verify(req.body.refreshToken, config.refreshSecret) as { sub: string }; return ok(res, { accessToken: jwt.sign({ sub: payload.sub }, config.jwtSecret, { expiresIn: "15m" }) }); } catch { return fail(res, "Invalid refresh token", 401); } });
 router.post("/logout-all", authenticate, async (req, res) => { await audit("auth.logout_all", req.auth!.user.id); return ok(res, null, "Signed out from all devices"); });
 router.post("/forgot-password", validate(z.object({ email: z.string().email().transform(v => v.toLowerCase()) })), async (req, res) => { const user = (await readDb<User>("users")).find(item => item.email === req.body.email); if (user) await audit("auth.password_reset_requested", user.id); const resetToken = user ? jwt.sign({ sub: user.id, purpose: "password-reset" }, config.jwtSecret, { expiresIn: "15m" }) : undefined; return ok(res, { resetToken }, "If the account exists, reset instructions were created"); });

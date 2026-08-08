@@ -1,18 +1,5 @@
 [
   {
-    "email": "superadmin@salarymanager.com",
-    "fullName": "Super Admin",
-    "mobile": "9999999999",
-    "passwordHash": "$2b$12$mdLJuhKpPFXhIjRRsz9iQOsG1rOtGsW6LtB4o1ysDQGE0znuXfQfy",
-    "role": "Super Admin",
-    "status": "active",
-    "failedLoginAttempts": 0,
-    "loginHistory": [],
-    "createdAt": "2026-08-06T12:41:54.425Z",
-    "updatedAt": "2026-08-06T12:41:54.425Z",
-    "id": "dbb296a3-28ea-49b6-a785-bfcc7168ef1c"
-  },
-  {
     "email": "admin@salarymanager.com",
     "fullName": "Admin",
     "mobile": "9999999999",
@@ -24,32 +11,6 @@
     "createdAt": "2026-08-06T12:41:54.425Z",
     "updatedAt": "2026-08-06T12:41:54.425Z",
     "id": "c2880112-8c24-475c-9e74-a5277bf2b3da"
-  },
-  {
-    "email": "advisor@salarymanager.com",
-    "fullName": "Finance Advisor",
-    "mobile": "9999999999",
-    "passwordHash": "$2b$12$kQ4E/thu3rbMjWhPrAjQ4ejwsOmpV4o8B7NTzyC3U6IYiMvExONGC",
-    "role": "Finance Advisor",
-    "status": "active",
-    "failedLoginAttempts": 0,
-    "loginHistory": [],
-    "createdAt": "2026-08-06T12:41:54.425Z",
-    "updatedAt": "2026-08-06T12:41:54.425Z",
-    "id": "61ee42e6-3f3c-4df3-aa14-ffe13311fec2"
-  },
-  {
-    "email": "auditor@salarymanager.com",
-    "fullName": "Auditor",
-    "mobile": "9999999999",
-    "passwordHash": "$2b$12$5P7eiR1.Jod81mEDy6c63eIINMfTL8IDpaKAwL3CMYoSpWdF7lx16",
-    "role": "Auditor",
-    "status": "active",
-    "failedLoginAttempts": 0,
-    "loginHistory": [],
-    "createdAt": "2026-08-06T12:41:54.425Z",
-    "updatedAt": "2026-08-06T12:41:54.425Z",
-    "id": "3f0a4de5-c0c5-4054-a283-7419fc91aeaa"
   },
   {
     "email": "user@salarymanager.com",
@@ -117,20 +78,6 @@
     "id": "75449ab1-1cdd-4485-a99c-8deba2002e8d"
   },
   {
-    "email": "test2@example.com",
-    "password": "password123",
-    "fullName": "Test User",
-    "mobile": "9999999999",
-    "passwordHash": "$2b$12$Frlz7XOL4UR5YAvqdiD1DOVLyIjzlmol8Odmerhncy6rW1UpS3caa",
-    "role": "Normal User",
-    "status": "active",
-    "failedLoginAttempts": 0,
-    "loginHistory": [],
-    "createdAt": "2026-08-06T14:37:23.847Z",
-    "updatedAt": "2026-08-06T14:37:23.847Z",
-    "id": "518edd53-f150-4663-8f38-35a098037f60"
-  },
-  {
     "email": "test@test.com",
     "password": "password",
     "fullName": "Test User",
@@ -145,21 +92,5 @@
     "createdAt": "2026-08-07T12:20:04.192Z",
     "updatedAt": "2026-08-07T12:20:04.192Z",
     "id": "2683ca08-9bc2-4b8a-8c60-cde975e25ffd"
-  },
-  {
-    "email": "testuser1@example.com",
-    "password": "password123",
-    "fullName": "John Doe",
-    "mobile": "9876543210",
-    "salaryAmount": 50000,
-    "salaryDate": 11,
-    "passwordHash": "$2b$12$ujBz9pF8unfRFj1/aU7ReuNV1mSs3xyDwEeD0VMChJa8E5KKQR/fq",
-    "role": "Normal User",
-    "status": "active",
-    "failedLoginAttempts": 0,
-    "loginHistory": [],
-    "createdAt": "2026-08-07T12:40:36.761Z",
-    "updatedAt": "2026-08-07T12:40:36.762Z",
-    "id": "9d9d5166-1348-4cbb-ba4a-bb78e6dfc233"
   }
 ]

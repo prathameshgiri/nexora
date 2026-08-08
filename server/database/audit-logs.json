@@ -250,5 +250,40 @@
     "metadata": {},
     "createdAt": "2026-08-08T15:54:38.967Z",
     "id": "e38cf280-bf4c-4d49-8c06-11bb91d1635a"
+  },
+  {
+    "action": "user.deleted",
+    "userId": "61ee42e6-3f3c-4df3-aa14-ffe13311fec2",
+    "metadata": {},
+    "createdAt": "2026-08-08T16:04:43.921Z",
+    "id": "e5213e72-8266-49ac-94b8-08e4623a9d9e"
+  },
+  {
+    "action": "user.deleted",
+    "userId": "9d9d5166-1348-4cbb-ba4a-bb78e6dfc233",
+    "metadata": {},
+    "createdAt": "2026-08-08T16:04:52.354Z",
+    "id": "6a78d229-32bf-4c45-a46f-7fed7589e0a8"
+  },
+  {
+    "action": "user.deleted",
+    "userId": "3f0a4de5-c0c5-4054-a283-7419fc91aeaa",
+    "metadata": {},
+    "createdAt": "2026-08-08T16:04:59.519Z",
+    "id": "00eeb8a8-9640-4819-a9e6-9d670f7c4c57"
+  },
+  {
+    "action": "user.deleted",
+    "userId": "dbb296a3-28ea-49b6-a785-bfcc7168ef1c",
+    "metadata": {},
+    "createdAt": "2026-08-08T16:05:07.433Z",
+    "id": "92118ced-ab39-45ce-8bd2-134547822a33"
+  },
+  {
+    "action": "user.deleted",
+    "userId": "518edd53-f150-4663-8f38-35a098037f60",
+    "metadata": {},
+    "createdAt": "2026-08-08T16:10:27.872Z",
+    "id": "9f077bc1-fb23-468a-8e91-a06a955da601"
   }
 ]
